@@ -1,20 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  --color-cream: #f6ead4;
-  --color-cream-dark: #ecd9b6;
-  --color-parchment: #fbf3e2;
-  --color-terracotta: #c96a45;
-  --color-terracotta-dark: #a84f31;
-  --color-copper: #b9793f;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-cream: #f2e2c4;
+  --color-cream-dark: #e5cf9e;
+  --color-parchment: #faf1dd;
+  --color-terracotta: #c1440e;
+  --color-terracotta-dark: #963309;
+  --color-copper: #b5651d;
+  --color-copper-light: #d68a3f;
+  --color-walnut: #3d2817;
+  --color-walnut-dark: #2a1a0e;
   --color-espresso: #4a3123;
-  --color-espresso-dark: #342116;
+  --color-espresso-dark: #2e1d13;
   --color-cocoa: #6b4530;
-  --color-sage: #6f8f5b;
-  --color-sage-dark: #4f6b41;
+  --color-sage: #4f7a45;
+  --color-sage-dark: #35532d;
+  --color-forest: #3f5d3a;
   --color-glow: #ffcf7a;
   --color-glow-soft: #ffe4ad;
   --color-ember: #ff9d4d;
+
+  /* Cozy-shelf lighting/material knobs, kept as variables so the whole scene's
+     warmth and contrast can be tuned from one place. */
+  --shelf-ambient-light: 0.5;
+  --shelf-wood-dark: #2a1810;
+  --shelf-wood-mid: #4a2f1c;
+  --candle-light: #ffcf7a;
+  --fairy-light-color: #ffe4ad;
+  --book-title-contrast: rgba(10, 6, 3, 0.55);
+  --shelf-shadow-strength: 0.35;
+
+  /* Dark stone-block wall texture (running-bond mortar joints), tiled behind the whole page */
+  --stone-wall: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='110'%3E%3Crect width='220' height='110' fill='%23140f0b'/%3E%3Cg stroke='%230a0705' stroke-width='3'%3E%3Crect x='2' y='2' width='103' height='49' rx='3' fill='%231c150f'/%3E%3Crect x='109' y='2' width='55' height='49' rx='3' fill='%23241a12'/%3E%3Crect x='168' y='2' width='50' height='49' rx='3' fill='%231a130d'/%3E%3Crect x='-27' y='55' width='50' height='49' rx='3' fill='%23201710'/%3E%3Crect x='27' y='55' width='72' height='49' rx='3' fill='%23170f0a'/%3E%3Crect x='103' y='55' width='40' height='49' rx='3' fill='%23271c13'/%3E%3Crect x='147' y='55' width='45' height='49' rx='3' fill='%231d150e'/%3E%3Crect x='196' y='55' width='24' height='49' rx='3' fill='%231f160f'/%3E%3C/g%3E%3Cg fill='%23000000' opacity='0.28'%3E%3Crect x='2' y='46' width='103' height='6' rx='2'/%3E%3Crect x='109' y='46' width='55' height='6' rx='2'/%3E%3Crect x='27' y='99' width='72' height='6' rx='2'/%3E%3C/g%3E%3Cg fill='%23ffffff' opacity='0.03'%3E%3Crect x='4' y='4' width='99' height='4' rx='2'/%3E%3Crect x='111' y='4' width='51' height='4' rx='2'/%3E%3Crect x='29' y='57' width='68' height='4' rx='2'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 @theme inline {
@@ -24,11 +43,15 @@
   --color-terracotta: var(--color-terracotta);
   --color-terracotta-dark: var(--color-terracotta-dark);
   --color-copper: var(--color-copper);
+  --color-copper-light: var(--color-copper-light);
+  --color-walnut: var(--color-walnut);
+  --color-walnut-dark: var(--color-walnut-dark);
   --color-espresso: var(--color-espresso);
   --color-espresso-dark: var(--color-espresso-dark);
   --color-cocoa: var(--color-cocoa);
   --color-sage: var(--color-sage);
   --color-sage-dark: var(--color-sage-dark);
+  --color-forest: var(--color-forest);
   --color-glow: var(--color-glow);
   --color-glow-soft: var(--color-glow-soft);
   --color-ember: var(--color-ember);
@@ -41,17 +64,87 @@ html, body {
 }
 
 body {
-  background:
-    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(255, 207, 122, 0.35), transparent 60%),
-    radial-gradient(ellipse 50% 35% at 90% 10%, rgba(255, 157, 77, 0.18), transparent 55%),
-    linear-gradient(180deg, var(--color-cream) 0%, var(--color-cream-dark) 100%);
-  color: var(--color-espresso);
-  font-family: var(--font-body), "Segoe UI", sans-serif;
+  background-color: #17130f;
+  background-image:
+    /* localized warm light pools, kept small and sharp so they read as light sources, not a flat wash */
+    radial-gradient(ellipse 20% 16% at 14% 5%, rgba(255, 207, 122, 0.16), transparent 70%),
+    radial-gradient(ellipse 18% 14% at 88% 9%, rgba(255, 157, 77, 0.1), transparent 68%),
+    /* vignette: corners fall gently into shadow, without hiding the shelves themselves */
+    radial-gradient(ellipse 95% 80% at 50% 35%, transparent 55%, rgba(5, 3, 2, 0.3) 100%),
+    var(--stone-wall);
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 220px 110px;
+  background-attachment: fixed, fixed, fixed, fixed;
+  color: var(--color-cream);
+  font-family: var(--font-body);
   min-height: 100dvh;
+  position: relative;
+}
+
+/* Global hand-drawn paper grain overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Photo backdrop of the bookshop interior, sitting behind the entire app */
+.app-bg-root {
+  position: relative;
+  min-height: 100dvh;
+  background-color: #2a1b12;
+  background-image: url("/images/bookshop-bg.jpg");
+  background-image: image-set(
+    url("/images/bookshop-bg.webp") type("image/webp"),
+    url("/images/bookshop-bg.jpg") type("image/jpeg")
+  );
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+@media (max-width: 640px) {
+  .app-bg-root {
+    /* fixed attachment breaks on iOS Safari */
+    background-attachment: scroll;
+    /* keep the armchair + door in frame instead of the outer shelves */
+    background-position: center 30%;
+  }
+}
+
+.app-bg-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* A soft amber-tinted wash rather than a heavy darken, so the shelf photo stays
+     bright enough to read spines against without a hover. */
+  background: linear-gradient(
+    180deg,
+    rgba(40, 24, 12, calc(var(--shelf-ambient-light) * 0.62)) 0%,
+    rgba(24, 15, 9, calc(var(--shelf-ambient-light) * 0.85)) 100%
+  );
+}
+
+.app-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Semi-transparent glass treatment for the header, floating over the photo backdrop */
+.header-glass {
+  background: rgba(20, 12, 8, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 h1, h2, h3, .display {
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-display);
 }
 
 /* Warm scrollbar */
@@ -68,38 +161,284 @@ h1, h2, h3, .display {
   opacity: 0.5;
 }
 
+/* Hand-drawn wobble filter, applied to decor + shelf edges for an illustrative feel */
+.roughen {
+  filter: url(#roughen);
+}
+
 .wood-shelf {
-  background:
-    linear-gradient(180deg, #a6693f 0%, #8a5230 55%, #74431f 100%);
+  /* Matte wood-board panel: a warm grained tint over the photo backdrop, rather
+     than a glossy frosted-glass slab, so the shelf itself reads as timber. */
+  background-color: rgba(38, 24, 14, 0.46);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.028) 0px,
+    transparent 2px,
+    transparent 7px,
+    rgba(0, 0, 0, 0.055) 8px,
+    transparent 11px
+  );
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   box-shadow:
-    inset 0 3px 0 rgba(255, 230, 190, 0.35),
-    inset 0 -6px 10px rgba(0, 0, 0, 0.28),
-    0 10px 18px -8px rgba(58, 33, 22, 0.55);
+    inset 0 1px 0 rgba(255, 214, 160, 0.2),
+    inset 0 -3px 7px -3px rgba(0, 0, 0, calc(var(--shelf-shadow-strength) * 0.7)),
+    0 8px 22px -6px rgba(0, 0, 0, calc(var(--shelf-shadow-strength) + 0.1));
+  border-radius: 10px 10px 3px 3px;
+  position: relative;
+}
+
+/* Warm light pooling low over the shelf, as if lit by a nearby lamp/candle: a tight bright core with
+   a soft natural falloff. Rendered on the TOP row of a shelf group only (see ShelfRow) — repeating
+   this same bright patch on every wrapped row stacked it into vertical glare columns down the page,
+   which is exactly the "sun stripe" look we're trying to avoid. */
+.shelf-glow-pool {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 16% 50% at 13% 50%, rgba(255, 224, 170, 0.26), transparent 72%),
+    radial-gradient(ellipse 30% 70% at 13% 55%, rgba(255, 190, 110, 0.1), transparent 76%),
+    radial-gradient(ellipse 12% 40% at 90% 40%, rgba(255, 157, 77, 0.14), transparent 72%);
+  mix-blend-mode: screen;
+  border-radius: inherit;
+}
+
+/* A much fainter version for lower rows: just enough reflected warmth to feel lit by the shelf
+   above, without reintroducing bright repeated columns. */
+.shelf-glow-pool-faint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(255, 200, 140, 0.06), transparent 75%);
+  mix-blend-mode: screen;
+  border-radius: inherit;
+}
+
+/* The board's front face/thickness, hanging below the top surface so the shelf reads as a real 3D plank and not a flat card */
+.wood-shelf::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: -18px;
+  height: 20px;
+  border-radius: 3px 3px 10px 10px;
+  background:
+    /* short vertical fibres, as wood grain looks end-on from the front */
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.22) 0px,
+      transparent 1.5px,
+      transparent 5px,
+      rgba(255, 255, 255, 0.05) 6px,
+      transparent 9px
+    ),
+    linear-gradient(180deg, #6b4020 0%, var(--shelf-wood-mid) 55%, var(--shelf-wood-dark) 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 214, 160, 0.42),
+    inset 0 -6px 8px -4px rgba(0, 0, 0, 0.5),
+    0 12px 18px -6px rgba(6, 3, 1, 0.7);
 }
 
 .wood-grain {
   background-image: repeating-linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.035) 0px,
-    rgba(255, 255, 255, 0.035) 1px,
+    rgba(255, 255, 255, 0.04) 0px,
+    rgba(255, 255, 255, 0.04) 1px,
     transparent 1px,
     transparent 7px
   );
 }
 
 .paper-texture {
-  background-image: radial-gradient(rgba(74, 49, 35, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(74, 49, 35, 0.06) 1px, transparent 1px);
   background-size: 6px 6px;
+}
+
+.spine-shadow {
+  background: radial-gradient(ellipse 65% 100% at 50% 0%, rgba(10, 5, 2, 0.6), transparent 70%);
+}
+
+/* Foil-stamp ornaments (frame/star/laurel/etc, see SpineDecor in bookVisuals.ts).
+   Two tones layered as text/background so the emboss reads as pressed metal
+   rather than a flat sticker: a bright highlight offset one way, a soft dark
+   shade offset the other. */
+.foil-gold {
+  color: #cda45c;
+  filter: drop-shadow(0 1px 0 rgba(255, 244, 214, 0.35)) drop-shadow(0 -0.5px 0 rgba(60, 35, 10, 0.4));
+}
+.foil-silver {
+  color: #c7ccd1;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.4)) drop-shadow(0 -0.5px 0 rgba(30, 30, 35, 0.4));
+}
+
+/* Foreshortened top edge of the book: the visible page-block, warm cream
+   paper with faint horizontal leaf-lines and a little grain, instead of a
+   flat highlight strip. */
+.page-edge {
+  background-color: #ede2c6;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(120, 95, 55, 0.16) 0px, rgba(120, 95, 55, 0.16) 1px, transparent 1px, transparent 3px),
+    radial-gradient(rgba(120, 95, 55, 0.15) 1px, transparent 1px);
+  background-size: 100% 3px, 5px 5px;
+}
+
+/* Faint scuffed-corner wear, placed via the --worn-corner custom property
+   (0 = pristine, 1 = well-loved) set per-book from wornAmount. */
+.spine-worn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: var(--worn-corner, 0);
+  background:
+    radial-gradient(circle 10px at 6% 8%, rgba(255, 245, 225, 0.5), transparent 70%),
+    radial-gradient(circle 12px at 94% 95%, rgba(0, 0, 0, 0.35), transparent 70%),
+    radial-gradient(circle 8px at 90% 6%, rgba(255, 245, 225, 0.3), transparent 70%);
+}
+
+/* Per-book brightness variance (set via --depth-shade, see bookVisuals.ts) applied through a
+   class instead of an inline `filter` so the hover boost below can still stack on top of it —
+   an inline style filter would otherwise permanently win over any filter utility class. */
+.book-spine-btn {
+  filter: brightness(var(--depth-shade, 1)) hue-rotate(var(--hue-drift, 0deg));
+}
+.book-spine-btn:hover {
+  filter: brightness(calc(var(--depth-shade, 1) * 1.1)) hue-rotate(var(--hue-drift, 0deg));
+}
+
+/* Positioning wrapper for the <FairyLights> SVG along a shelf's top edge. The
+   wire/bulbs themselves are drawn by the component so the light reads as
+   individual bulbs rather than a repeating striped pattern. */
+.shelf-garland-wrap {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  top: -30px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* A translucent bookcase case wrapping every physical shelf board of one
+   shelf group: back panel + left/right stiles, so the row still shows the
+   photo backdrop through it but reads as a real cabinet, not floating bars. */
+.bookcase-frame {
+  position: relative;
+  padding: 0 20px;
+}
+
+.bookcase-frame::before {
+  /* recessed back wall behind the boards/books — deliberately more opaque than the
+     boards themselves so the compartment reads as enclosed, not just a tinted card */
+  content: "";
+  position: absolute;
+  inset: -10px 6px -26px;
+  z-index: -2;
+  background-color: rgba(18, 10, 6, 0.58);
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.09) 0px,
+    transparent 3px,
+    transparent 10px,
+    rgba(255, 255, 255, 0.03) 11px,
+    transparent 16px
+  );
+  border-radius: 12px;
+  box-shadow:
+    inset 0 18px 22px -14px rgba(0, 0, 0, 0.75),
+    inset 0 -14px 20px -12px rgba(0, 0, 0, 0.7),
+    inset 16px 0 22px -14px rgba(0, 0, 0, 0.65),
+    inset -16px 0 22px -14px rgba(0, 0, 0, 0.65);
+}
+
+.bookcase-side-wall {
+  position: absolute;
+  top: -12px;
+  bottom: -28px;
+  width: 22px;
+  z-index: 4;
+  pointer-events: none;
+  background-color: rgba(48, 29, 17, 0.85);
+  background-image:
+    linear-gradient(90deg, rgba(255, 214, 160, 0.22), transparent 70%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.18) 0px,
+      transparent 2px,
+      transparent 9px,
+      rgba(255, 255, 255, 0.05) 10px,
+      transparent 15px
+    );
+  box-shadow:
+    inset 2px 0 0 rgba(255, 214, 160, 0.16),
+    inset 0 0 14px rgba(0, 0, 0, 0.5),
+    2px 0 8px -2px rgba(0, 0, 0, 0.4);
+}
+
+.bookcase-side-wall.left {
+  left: -3px;
+  border-radius: 8px 3px 3px 8px;
+}
+
+.bookcase-side-wall.right {
+  right: -3px;
+  border-radius: 3px 8px 8px 3px;
+  transform: scaleX(-1);
+}
+
+/* Shelves further back in the room read a touch darker and flatter, pushing the
+   front row forward, without going so dim titles become hard to read. */
+.wood-shelf.shelf-recede {
+  filter: brightness(0.92) saturate(0.92);
+}
+
+/* The room around the shelves: dark ceiling beams up top, so the shelves read as furniture
+   inside a space. Overflow stays visible so the lamp's glow can bloom past the header edge. */
+.room-scene {
+  position: relative;
+}
+.room-scene::before {
+  /* ceiling beams */
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 22px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #1c120a 0px,
+      #2a1a0e 46px,
+      #170e07 48px,
+      #170e07 56px
+    );
+  box-shadow: 0 10px 18px -6px rgba(0, 0, 0, 0.75);
+  z-index: 1;
+}
+
+/* Ledge display items (luggage, book stack, plant, quote frame, orb, lamp): a shared
+   soft contact shadow so every object reads as sitting on the same wood surface with
+   the same weight, no matter how different its own SVG shading is. */
+.ledge-item {
+  display: block;
+  filter: drop-shadow(0 6px 5px rgba(10, 5, 2, 0.45));
 }
 
 .glow-flicker {
   animation: flicker 4.5s ease-in-out infinite;
 }
 
+.glow-soft-blur {
+  filter: blur(18px);
+  mix-blend-mode: screen;
+}
+
 @keyframes flicker {
   0%, 100% { opacity: 0.9; transform: scale(1); }
-  45% { opacity: 1; transform: scale(1.03); }
-  60% { opacity: 0.85; transform: scale(0.99); }
+  45% { opacity: 1; transform: scale(1.04); }
+  60% { opacity: 0.85; transform: scale(0.98); }
 }
 
 @keyframes float-slow {
@@ -109,6 +448,28 @@ h1, h2, h3, .display {
 
 .float-slow {
   animation: float-slow 6s ease-in-out infinite;
+}
+
+@keyframes sway-slow {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+.sway-slow {
+  transform-origin: top center;
+  animation: sway-slow 7s ease-in-out infinite;
+}
+
+/* Dark, evening reading-nook backdrop for the header/scene areas */
+.scene-dark {
+  background-color: #1c140d;
+  background-image:
+    radial-gradient(ellipse 26% 55% at 15% 30%, rgba(255, 190, 110, 0.18), transparent 68%),
+    radial-gradient(ellipse 22% 45% at 90% 20%, rgba(255, 140, 70, 0.1), transparent 65%),
+    linear-gradient(180deg, rgba(36, 20, 7, 0.42) 0%, rgba(23, 13, 6, 0.58) 60%, rgba(18, 10, 5, 0.68) 100%),
+    var(--stone-wall);
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 220px 110px;
 }
 
 @keyframes pop-in {
@@ -127,4 +488,95 @@ h1, h2, h3, .display {
 
 .fade-in {
   animation: fade-in 0.18s ease-out;
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.slide-in-right {
+  animation: slide-in-right 0.22s ease-out;
+}
+
+/* The decor picker reads as a little greenhouse window you fall into */
+.decor-window {
+  background:
+    radial-gradient(1px 1px at 12% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 15%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 40% 8%, #fff, transparent),
+    radial-gradient(1px 1px at 85% 25%, #fff, transparent),
+    linear-gradient(200deg, #1f2f18 0%, #2a3d1f 35%, #35431f 65%, #17200f 100%);
+}
+
+.decor-window-muntins {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background:
+    linear-gradient(90deg, transparent 49.3%, rgba(20, 12, 7, 0.5) 49.3%, rgba(20, 12, 7, 0.5) 50.7%, transparent 50.7%),
+    linear-gradient(0deg, transparent 49.3%, rgba(20, 12, 7, 0.5) 49.3%, rgba(20, 12, 7, 0.5) 50.7%, transparent 50.7%);
+}
+
+/* Drop zones between books: invisible until a decor item is dragged over them */
+.decor-dropzone {
+  flex-shrink: 0;
+  width: 10px;
+  align-self: stretch;
+  border-radius: 4px;
+  transition: width 0.12s ease, background-color 0.12s ease;
+}
+
+.decor-dropzone.decor-dropzone-active {
+  width: 34px;
+  background: rgba(255, 207, 122, 0.25);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 207, 122, 0.6);
+}
+
+/* "Edit shelf" mode: books jiggle in place (iOS-icon style) to signal they can
+   be picked up. Two slightly offset keyframes + a per-book animation-delay
+   (set inline from a hash of the book id) keep neighbouring spines out of
+   sync so the shelf doesn't wiggle as one rigid block. --book-tilt carries
+   each spine's normal resting rotation (see BookSpine) so wiggling still
+   settles back to its usual tilt, not to zero. */
+@keyframes book-wiggle-a {
+  0%, 100% { transform: rotate(calc(var(--book-tilt, 0deg) - 1.8deg)); }
+  50% { transform: rotate(calc(var(--book-tilt, 0deg) + 1.8deg)); }
+}
+@keyframes book-wiggle-b {
+  0%, 100% { transform: rotate(calc(var(--book-tilt, 0deg) + 1.8deg)); }
+  50% { transform: rotate(calc(var(--book-tilt, 0deg) - 1.8deg)); }
+}
+.book-wiggle-a {
+  animation: book-wiggle-a 0.24s ease-in-out infinite;
+  animation-delay: var(--wiggle-delay, 0s);
+}
+.book-wiggle-b {
+  animation: book-wiggle-b 0.26s ease-in-out infinite;
+  animation-delay: var(--wiggle-delay, 0s);
+}
+
+/* Insertion point while dragging a book — the same glow pill ShelfRow already
+   draws between books/decor for gap hints, given a name so it can also be
+   used for the settle-in bounce on the book that just landed. */
+@keyframes book-drop-settle {
+  0% { transform: scale(1.08); filter: brightness(1.2); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.book-drop-settle {
+  animation: book-drop-settle 0.22s ease-out;
+}
+
+/* Candle/fairy-light flicker and gentle sways are decorative motion only —
+   turn them off for users who've asked to reduce motion. */
+@media (prefers-reduced-motion: reduce) {
+  .glow-flicker,
+  .float-slow,
+  .sway-slow,
+  .book-wiggle-a,
+  .book-wiggle-b,
+  .book-drop-settle {
+    animation: none !important;
+  }
 }

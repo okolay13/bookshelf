@@ -1,11 +1,44 @@
 "use client";
 
-export type ViewMode = "shelf" | "status" | "list";
+import type { ReactNode } from "react";
 
-const OPTIONS: { key: ViewMode; label: string }[] = [
-  { key: "shelf", label: "По полкам" },
-  { key: "status", label: "По статусу" },
-  { key: "list", label: "Список" },
+export type ViewMode = "shelf" | "grid" | "list";
+
+const OPTIONS: { key: ViewMode; label: string; icon: ReactNode }[] = [
+  {
+    key: "shelf",
+    label: "Полка",
+    icon: (
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 4v16M9 4v16M14 4v16M19 4v16" />
+        <path d="M3 9h3M8 6h3M13 10h3M18 7h3" />
+      </svg>
+    ),
+  },
+  {
+    key: "grid",
+    label: "Сетка",
+    icon: (
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
+      </svg>
+    ),
+  },
+  {
+    key: "list",
+    label: "Список",
+    icon: (
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 6h13M8 12h13M8 18h13" />
+        <circle cx="3.5" cy="6" r="1.5" fill="currentColor" stroke="none" />
+        <circle cx="3.5" cy="12" r="1.5" fill="currentColor" stroke="none" />
+        <circle cx="3.5" cy="18" r="1.5" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
 ];
 
 export function ViewSwitcher({
@@ -21,13 +54,16 @@ export function ViewSwitcher({
         <button
           key={opt.key}
           onClick={() => onChange(opt.key)}
-          className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors ${
+          title={opt.label}
+          aria-label={opt.label}
+          aria-pressed={value === opt.key}
+          className={`rounded-full px-3 py-1.5 transition-colors ${
             value === opt.key
               ? "bg-terracotta text-cream shadow"
               : "text-espresso/70 hover:bg-cream-dark/60"
           }`}
         >
-          {opt.label}
+          {opt.icon}
         </button>
       ))}
     </div>

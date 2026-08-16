@@ -1,18 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito, Caveat } from "next/font/google";
 import "./globals.css";
-
-const bodyFont = Nunito({
-  variable: "--font-body",
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "600", "700", "800"],
-});
-
-const displayFont = Caveat({
-  variable: "--font-display",
-  subsets: ["latin", "cyrillic"],
-  weight: ["500", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: "Книжная полка",
@@ -25,11 +12,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ru"
-      className={`${bodyFont.variable} ${displayFont.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="ru" className="h-full antialiased">
+      <body className="min-h-full flex flex-col">
+        <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+          <filter id="roughen">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.035" numOctaves="2" result="noise" seed="7" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </svg>
+
+        <div className="app-bg-root flex-1 flex flex-col">
+          <div className="app-content flex-1 flex flex-col">{children}</div>
+        </div>
+      </body>
     </html>
   );
 }
