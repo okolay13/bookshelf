@@ -86,26 +86,17 @@ export function ShelfRow({
   const measureRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
-  const [isDesktop, setIsDesktop] = useState(false);
   const [dragHint, setDragHint] = useState<{ rowIndex: number; gapKey: string; slot: number } | null>(null);
 
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setIsDesktop(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-
-  useEffect(() => {
     const el = measureRef.current;
-    if (!el || !isDesktop) return;
+    if (!el) return;
     const ro = new ResizeObserver((entries) => {
       setContainerWidth(entries[0].contentRect.width);
     });
     ro.observe(el);
     return () => ro.disconnect();
-  }, [isDesktop]);
+  }, []);
 
   const items: RowItem[] = useMemo(() => {
     const bookItems: RowItem[] = books.map((b, i) => ({
@@ -125,18 +116,19 @@ export function ShelfRow({
     return [...bookItems, ...decorItems].sort((a, b) => a.slot - b.slot);
   }, [books, decor]);
 
-  // On mobile, keep a single long shelf you scroll along sideways. On desktop, pack items
-  // (books + placed decor) into justified rows so each wrapped line can be its own physical shelf board.
+  // Pack items (books + placed decor) into justified rows so each wrapped line can be
+  // its own physical shelf board — on every screen size, so small screens stack shelves
+  // vertically (page scroll) instead of scrolling a single row sideways.
   const rows = useMemo(() => {
     if (items.length === 0) return [[] as number[]];
-    if (!isDesktop || !containerWidth) return [items.map((_, i) => i)];
+    if (!containerWidth) return [items.map((_, i) => i)];
     const usable = containerWidth - ROW_PADDING_X - (onAddClick ? ADD_BTN_RESERVE : 0);
     const chunked = chunkByWidth(
       items.map((it) => it.width),
       Math.max(usable, 60)
     );
     return chunked.length ? chunked : [items.map((_, i) => i)];
-  }, [items, isDesktop, containerWidth, onAddClick]);
+  }, [items, containerWidth, onAddClick]);
 
   function slotForGap(rowItems: RowItem[], gapIndex: number): number {
     if (rowItems.length === 0) return 0;
@@ -339,7 +331,7 @@ export function ShelfRow({
               ref={(el) => {
                 rowRefs.current[ri] = el;
               }}
-              className={`relative flex items-end gap-2 overflow-x-auto md:overflow-visible px-3 pt-5 pb-1 wood-shelf ${
+              className={`relative flex items-end gap-2 overflow-visible px-3 pt-5 pb-1 wood-shelf ${
                 ri > 0 ? "mt-9" : ""
               } ${isBackRow ? "shelf-recede" : ""}`}
               onDragOver={canDrop ? (e) => handleDragOver(e, ri, rowItems) : undefined}
